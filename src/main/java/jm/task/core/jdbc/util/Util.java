@@ -20,37 +20,6 @@ import org.hibernate.service.ServiceRegistry;
 
 public class Util {
 
-    private static Connection conn = null;
-
-    public static Connection getConnection() {
-        if (conn == null) {
-            try {
-                // Загрузка драйвера JDBC
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Properties props = getProps();
-
-
-                // Создание подключения к базе данных
-                conn = DriverManager.getConnection(props.getProperty("db.url"), props.getProperty("db.username"), props.getProperty("db.password"));
-
-            } catch (ClassNotFoundException | SQLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return conn;
-    }
-    private static Properties getProps() throws IOException {
-        Properties props = new Properties();
-        try (InputStream in = Files.newInputStream(Paths.get(Objects.requireNonNull(Util.class.getResource("/database.properties")).toURI()))) {
-            props.load(in);
-            return props;
-        } catch (IOException | URISyntaxException e) {
-            throw new IOException("Database config file not found", e);
-        }
-    }
-
     public static SessionFactory sessionFactory;
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
